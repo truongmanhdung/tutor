@@ -1,0 +1,25 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "name": "Lora Wunsch update",
+      "desc": "The Nagasaki L",
+      "image": "http://placeimg.com/640/480/cats",
+      "price": "4556"
+    },
+    {
+      "name": "Alberta Shanahan",
+      "image": "http://placeimg.com/640/480/business",
+      "desc": "The slim & simple Maple Gaming Keyboard from Dev Byte comes with a sleek body and 7- Color RGB LED Back-lighting for smart functionality",
+      "price": "395.00",
+      "id": "2"
+    },
+    {
+      "id": "3",
+      "name": "Frederick Weimann III ădsaddsads",
+      "desc": "Carbonite web goalkeeper gloves are ergonomically designed to give easy fit",
+      "image": "http://placeimg.com/640/480/nightlife",
+      "price": "3.00"
+    }
+  ]
+}
