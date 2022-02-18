@@ -45,7 +45,7 @@
     <script>
 
         const url = new URL(location.href);
-        const params = new URLSearchParams(url.search);
+        const params = new URLSearchParams(url.search); 
         const id = params.get('id');
 
         const form_edit = document.querySelector('#form-edit');
@@ -68,7 +68,7 @@
                 desc: desc.value,
                 image: image.value,
                 price: price.value
-            }
+            } 
             const data = await fetch(urlApi, {
                 method: "PUT",
                 headers: {

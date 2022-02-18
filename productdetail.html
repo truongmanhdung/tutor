@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <!-- https://cdnjs.com/libraries/twitter-bootstrap/5.0.0-beta1 -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta1/css/bootstrap.min.css"
+    />
+
+    <!-- Icons: https://getbootstrap.com/docs/5.0/extend/icons/ -->
+    <!-- https://cdnjs.com/libraries/font-awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+    />
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <div class="container">
+      <h3 class="text-center mb-3 mt-5">Chi tiết sản phẩm</h3>
+
+      <div class="row" id="show-detail"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta1/js/bootstrap.bundle.min.js"></script>
+    <script>
+      const show_detail = document.querySelector("#show-detail");
+      const url = new URL(location.href);
+      const params = new URLSearchParams(url.search);
+
+      const id = params.get("id");
+      const urlApi = `http://localhost:3000/products/${id}`;
+      fetch(urlApi)
+        .then((response) => response.json())
+        .then((data) => {
+          show_detail.innerHTML = `<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+          <img
+            class="w-100"
+            src="${data.image}"
+            alt=""
+          />
+        </div>
+
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+          <h5>Tên sản phẩm : ${data.name}</h5>
+          <p>Mô tả: ${data.desc}</p>
+          <p>Giá sản phẩm : ${data.price}</p>
+
+          <div class="form-group d-flex">
+            <label style="width: 100px; margin: 0; padding: 0" for=""
+              >Số lượng</label
+            >
+            <input type="number" id="quanlity" class="form-control" id="" placeholder="" />
+          </div>
+
+          <button type="button" id="add_cart" class="btn btn-success mt-3 d-block">
+            Thêm vào giỏ hàng
+          </button>
+          <a href="product.html" class="btn btn-outline-primary mt-3"
+            >Tiếp tục mua hàng</a
+          >
+        </div>`;
+
+          const add_cart = document.querySelector("#add_cart");
+          const quanlity = document.querySelector('#quanlity')
+          add_cart.addEventListener("click", () => {
+            let carts = JSON.parse(localStorage.getItem("carts"));
+            if (carts) {
+              const cartPr = carts.find((item) => item.product.id === id)
+              if(cartPr){
+                cartPr.quanlity += +quanlity.value
+              }else{
+                carts.push({
+                  product: data,
+                  quanlity: +quanlity.value
+                })
+              }
+            }else{
+              carts = [];
+              carts.push({
+                product: data,
+                quanlity: +quanlity.value
+              })
+            }
+            localStorage.setItem('carts', JSON.stringify(carts))
+          });
+        });
+    </script>
+  </body>
+</html>

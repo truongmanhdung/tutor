@@ -1,75 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Bootstrap CSS -->
     <!-- https://cdnjs.com/libraries/twitter-bootstrap/5.0.0-beta1 -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta1/css/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta1/css/bootstrap.min.css"
+    />
 
     <!-- Icons: https://getbootstrap.com/docs/5.0/extend/icons/ -->
     <!-- https://cdnjs.com/libraries/font-awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+    />
 
     <title>Hello, world!</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="container">
-        <form id="form-add">
-            <div class="mb-3">
-                <label class="form-label">Name Product</label>
-                <input type="text" id="name" class="form-control">
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Description</label>
-                <input type="text" id="desc" class="form-control">
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Image</label>
-                <input type="text" id="image" class="form-control">
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Price</label>
-                <input type="text" id="price" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-primary">Thêm</button>
-        </form>
+      <form id="form-add">
+        <div class="mb-3">
+          <label class="form-label">Name Product</label>
+          <input type="text" id="name" class="form-control" />
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label"
+            >Description</label
+          >
+          <input type="text" id="desc" class="form-control" />
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Image</label>
+          <input type="file" id="image" class="form-control" />
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Price</label>
+          <input type="text" id="price" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Thêm</button>
+      </form>
     </div>
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta1/js/bootstrap.bundle.min.js"></script>
     <script>
-        const form_add = document.querySelector('#form-add');
-        const name = document.querySelector('#name');
-        const desc = document.querySelector('#desc');
-        const image = document.querySelector('#image');
-        const price = document.querySelector('#price');
-        const urlApi = `http://localhost:3000/products`;
-        form_add.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const product = {
-                name: name.value,
-                desc: desc.value,
-                image: image.value,
-                price: price.value
-            }
-            const data = await fetch(urlApi, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(product)
-            })
-            
-            if(data){
-                window.location.href = 'http://127.0.0.1:5500/index.html'
-            }
-        })
-    </script>
-</body>
+      const form_add = document.querySelector("#form-add");
+      const name = document.querySelector("#name");
+      const desc = document.querySelector("#desc");
+      const image = document.querySelector("#image");
+      const price = document.querySelector("#price");
+      const urlApi = `http://localhost:3000/products`;
+      const CLOUDINARY_PRESET_KEY = "dungtmc";
+      const CLOUDINARY_API_URL =
+        "https://api.cloudinary.com/v1_1/ph12934/image/upload";
+      const formData = new FormData();
+      
+      
+      // call API cloudinary để đẩy ảnh lên
+        
+      form_add.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const file = image.files[0];
+        // console.log(file);
+        formData.append("file", file);
+        formData.append("upload_preset", CLOUDINARY_PRESET_KEY);
+        const { data } = await axios.post(CLOUDINARY_API_URL, formData, {
+          headers: {
+            "Content-Type": "application/form-data",
+          },
+        });
+        // console.log(data);
+        const product = {
+          name: name.value,
+          desc: desc.value,
+          image: data.url,
+          price: price.value,
+        };
+        const data1 = await fetch(urlApi, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(product),
+        });
 
+        if (data1) {
+          window.location.href = "index.html";
+        }
+      });
+    </script>
+  </body>
 </html>

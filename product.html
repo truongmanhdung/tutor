@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <!-- https://cdnjs.com/libraries/twitter-bootstrap/5.0.0-beta1 -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta1/css/bootstrap.min.css"
+    />
+
+    <!-- Icons: https://getbootstrap.com/docs/5.0/extend/icons/ -->
+    <!-- https://cdnjs.com/libraries/font-awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+    />
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <div class="container">
+      <h3 class="text-center my-5">Tất cả sản phẩm</h3>
+      <div class="row" id="list-product"></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta1/js/bootstrap.bundle.min.js"></script>
+    <script>
+      const list_data = document.querySelector("#list-product");
+      const url = "http://localhost:3000/products";
+      fetch(url)
+        .then((products) => products.json())
+        .then((res) => {
+          list_data.innerHTML = res
+            .map(
+              (product) =>
+                `<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+          <div class="card">
+            <img src="${product.image}" class="card-img-top" alt="..." />
+            <div class="card-body">
+              <h5 class="card-title">${product.name}</h5>
+              <p class="card-text">
+                ${product.desc}
+              </p>
+              <a href="productdetail.html?id=${product.id}" class="btn btn-primary">Xem chi tiết</a>
+            </div>
+          </div>
+        </div>`
+            )
+            .join("");
+        });
+    </script>
+  </body>
+</html>
